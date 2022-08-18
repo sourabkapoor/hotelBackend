@@ -33,4 +33,5 @@ def GetRoom(request, room_id):
 
 # return the whole list of rooms
 def getRoomsList(request):
-    pass
+    data = {"response": list(Rooms.objects.all().values())}
+    return JsonResponse(data)

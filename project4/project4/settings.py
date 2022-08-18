@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-b*z^evb4b)#3*ci2%gomd%w--r8wno$pcqw*823zyahw#-_kfm
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
+    'http://127.0.0.1:8000',
+    '127.0.0.1',
     "https://8000-mishalea-aback-njda0nca93q.ws-eu59.gitpod.io"
 ]
 
@@ -46,14 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rooms'
+    'rooms',
+    'accounts'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
