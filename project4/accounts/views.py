@@ -1,27 +1,57 @@
 from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from .models import Account
 
-def login(request):
-  userName = request.POST.get('user_name')
-  password = request.POST.get('password')
+def index(request):
+  if request.user.is_authenticated:
+    return redirect("home")
+  return redirect("login")
+
+def loginuser(request):
+  if request.method == "POST":
+    userEmail = request.POST.get('loginEmail')
+    password = request.POST.get('loginPassword')
+
+    user = authenticate(email=userEmail, password=password)
+
+    if user is not None:
+      login(request, user)
+      return redirect("home")
+    else:
+      return JsonResponse({"results": False})
   
-  user = authenticate(username=userName, password=password)
-  
-  if user is not None:
-    return JsonResponse({"results": True})
-  else:
-    return JsonResponse({"results": False})
-
-
+  if request.method == "GET":
+    if request.user.is_authenticated:
+      return redirect('home')
+    return render(request, 'login.html')
 
 def signup(request):
-  userName = request.POST.get('user_name')
-  userEmail = request.POST.get('email')
-  password = request.POST.get('password')
+  if request.method == "POST":
+    userName = request.POST.get('user_name')
+    userEmail = request.POST.get('email')
+    password = request.POST.get('password')
 
-  user = User.objects.create_user(userName, userEmail, password)
-  user.save()
+    user = Account.objects.create_user(userEmail, userName, password)
+    user.save()
 
-  return JsonResponse({"results": True})
+    return redirect('login')
+  
+  if request.method == "GET":
+    if request.user.is_authenticated:
+      return redirect('home')
+    return render(request, "signup.html")
+
+def home(request):
+  if request.method == "GET":
+    if request.user.is_authenticated:
+      return render(request, 'home.html')
+    else:
+      return redirect('login')
+
+def logoutUser(request):
+  if request.method == "GET":
+    if request.user.is_authenticated:
+      logout(request)
+      return redirect('login')
   
